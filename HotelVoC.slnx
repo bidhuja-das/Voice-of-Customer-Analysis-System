@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HotelVoC.API/HotelVoC.API.csproj" />
+  <Project Path="HotelVoC.Core/HotelVoC.Core.csproj" />
+</Solution>
