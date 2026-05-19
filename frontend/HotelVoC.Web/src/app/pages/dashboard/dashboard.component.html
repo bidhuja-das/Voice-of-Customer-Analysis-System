@@ -1,0 +1,92 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1>Executive Dashboard</h1>
+      <p>Real-time customer feedback intelligence</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="spinner"></div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- KPI Cards -->
+    <div class="grid-4" style="margin-bottom: 24px;">
+      <div class="card kpi-card">
+        <div class="kpi-icon" style="background: rgba(79,142,247,0.1)">📊</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Total Feedback</span>
+          <span class="kpi-value">{{ stats?.totalFeedback }}</span>
+        </div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-icon" style="background: rgba(46,204,113,0.1)">😊</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Positive Rate</span>
+          <span class="kpi-value positive">{{ stats?.positivePercent }}%</span>
+        </div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-icon" style="background: rgba(231,76,60,0.1)">🚨</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Critical Insights</span>
+          <span class="kpi-value negative">{{ stats?.criticalInsights }}</span>
+        </div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-icon" style="background: rgba(155,89,182,0.1)">🔍</div>
+        <div class="kpi-info">
+          <span class="kpi-label">Top Issue</span>
+          <span class="kpi-value topic">{{ stats?.topTopic }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <div class="card">
+        <h3 class="chart-title">Sentiment Distribution</h3>
+        <p class="chart-subtitle">Overall feedback sentiment breakdown</p>
+        <canvas #sentimentChart height="280"></canvas>
+      </div>
+      <div class="card">
+        <h3 class="chart-title">Feedback by Topic</h3>
+        <p class="chart-subtitle">Top issues reported by customers</p>
+        <canvas #topicChart height="280"></canvas>
+      </div>
+    </div>
+
+    <!-- Comparison Chart -->
+    <div class="card" style="margin-bottom: 24px;">
+      <h3 class="chart-title">Performance Comparison</h3>
+      <p class="chart-subtitle">Sentiment trends across time periods</p>
+      <canvas #comparisonChart height="120"></canvas>
+    </div>
+
+    <!-- Daily Reports -->
+    <div class="card">
+      <h3 class="chart-title">Daily Reports</h3>
+      <p class="chart-subtitle">AI-generated daily summaries</p>
+      <div class="reports-list">
+        <div class="report-item" *ngFor="let report of dailyReports">
+          <div class="report-header">
+            <div class="report-date">📅 {{ report.reportDate | date:'MMMM d, y' }}</div>
+            <div class="report-stats">
+              <span class="badge badge-positive">✅ {{ report.positiveCount }}</span>
+              <span class="badge badge-negative">❌ {{ report.negativeCount }}</span>
+              <span class="badge badge-neutral">➖ {{ report.neutralCount }}</span>
+              <span class="topic-tag">{{ report.topIssue }}</span>
+            </div>
+          </div>
+          <p class="report-summary">{{ report.summary }}</p>
+        </div>
+        <div *ngIf="dailyReports.length === 0" class="empty-state">
+          No daily reports yet
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

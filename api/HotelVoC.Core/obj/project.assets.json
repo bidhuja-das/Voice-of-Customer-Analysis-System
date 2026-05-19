@@ -921,11 +921,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\binduja\\Desktop\\VOC\\HotelVoC.Core\\HotelVoC.Core.csproj",
+      "projectUniqueName": "C:\\Users\\binduja\\Desktop\\VOC\\api\\HotelVoC.Core\\HotelVoC.Core.csproj",
       "projectName": "HotelVoC.Core",
-      "projectPath": "C:\\Users\\binduja\\Desktop\\VOC\\HotelVoC.Core\\HotelVoC.Core.csproj",
+      "projectPath": "C:\\Users\\binduja\\Desktop\\VOC\\api\\HotelVoC.Core\\HotelVoC.Core.csproj",
       "packagesPath": "C:\\Users\\binduja\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\binduja\\Desktop\\VOC\\HotelVoC.Core\\obj\\",
+      "outputPath": "C:\\Users\\binduja\\Desktop\\VOC\\api\\HotelVoC.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

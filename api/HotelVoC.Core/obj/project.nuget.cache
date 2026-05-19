@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SxzT80sy8os=",
+  "dgSpecHash": "r8v2TqSIqyo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\binduja\\Desktop\\VOC\\HotelVoC.Core\\HotelVoC.Core.csproj",
+  "projectFilePath": "C:\\Users\\binduja\\Desktop\\VOC\\api\\HotelVoC.Core\\HotelVoC.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\binduja\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512",
     "C:\\Users\\binduja\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.5\\microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",

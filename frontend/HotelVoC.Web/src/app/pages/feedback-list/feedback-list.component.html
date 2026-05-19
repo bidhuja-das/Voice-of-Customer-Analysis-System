@@ -1,0 +1,139 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Feedback Management</h1>
+      <p>View, filter and upload customer feedback</p>
+    </div>
+    <div class="header-actions">
+      <label class="upload-btn" [class.loading]="uploadLoading">
+        <span *ngIf="!uploadLoading">⬆ Upload CSV</span>
+        <span *ngIf="uploadLoading">Uploading...</span>
+        <input type="file" accept=".csv" (change)="onFileUpload($event)" hidden />
+      </label>
+    </div>
+  </div>
+
+  <!-- Upload messages -->
+  <div class="alert alert-success" *ngIf="uploadMessage">
+    ✅ {{ uploadMessage }}
+  </div>
+  <div class="alert alert-error" *ngIf="uploadError">
+    ❌ {{ uploadError }}
+  </div>
+
+  <!-- Filters -->
+  <div class="filters card">
+    <div class="filter-group">
+      <input
+        type="text"
+        placeholder="🔍 Search feedback..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="applyFilters()"
+        class="filter-input"
+      />
+    </div>
+    <div class="filter-group">
+      <select [(ngModel)]="selectedSentiment" (ngModelChange)="applyFilters()" class="filter-select">
+        <option value="">All Sentiments</option>
+        <option value="Positive">Positive</option>
+        <option value="Negative">Negative</option>
+        <option value="Neutral">Neutral</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <select [(ngModel)]="selectedSource" (ngModelChange)="applyFilters()" class="filter-select">
+        <option value="">All Sources</option>
+        <option *ngFor="let source of uniqueSources" [value]="source">{{ source }}</option>
+      </select>
+    </div>
+    <button class="btn-secondary" (click)="clearFilters()">Clear</button>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <span class="stat-item">
+      Total: <strong>{{ filteredFeedbacks.length }}</strong>
+    </span>
+    <span class="stat-item positive">
+      ✅ Positive: <strong>{{ filteredFeedbacks | sentimentCount:'Positive' }}</strong>
+    </span>
+    <span class="stat-item negative">
+      ❌ Negative: <strong>{{ filteredFeedbacks | sentimentCount:'Negative' }}</strong>
+    </span>
+    <span class="stat-item neutral">
+      ➖ Neutral: <strong>{{ filteredFeedbacks | sentimentCount:'Neutral' }}</strong>
+    </span>
+    <span class="stat-item">
+      ⏳ Pending: <strong>{{ filteredFeedbacks | pendingCount }}</strong>
+    </span>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="spinner"></div>
+
+  <!-- Table -->
+  <div class="table-container" *ngIf="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer</th>
+          <th>Source</th>
+          <th>Feedback</th>
+          <th>Sentiment</th>
+          <th>Topic</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of paginatedFeedbacks">
+          <td class="id-col">{{ f.feedbackId }}</td>
+          <td class="customer-col">{{ f.customerIdentifier }}</td>
+          <td><span class="source-badge">{{ f.sourceName }}</span></td>
+          <td class="text-col">{{ f.rawText }}</td>
+          <td>
+            <span *ngIf="f.sentiment" class="badge" [ngClass]="getSentimentClass(f.sentiment)">
+              {{ f.sentiment }}
+            </span>
+            <span *ngIf="!f.sentiment" class="badge badge-neutral">Pending</span>
+          </td>
+          <td>
+            <span *ngIf="f.topic" class="topic-tag">{{ f.topic }}</span>
+            <span *ngIf="!f.topic" class="text-muted">—</span>
+          </td>
+          <td class="date-col">{{ f.submittedAt | date:'MMM d, y' }}</td>
+          <td>
+            <span class="badge" [class.badge-positive]="f.isAnalyzed" [class.badge-neutral]="!f.isAnalyzed">
+              {{ f.isAnalyzed ? 'Analyzed' : 'Pending' }}
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="paginatedFeedbacks.length === 0">
+          <td colspan="8" class="empty-state">No feedback found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+      ← Prev
+    </button>
+    <ng-container *ngFor="let page of pages">
+      <button
+        class="page-btn"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+    </ng-container>
+    <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+      Next →
+    </button>
+  </div>
+
+</div>

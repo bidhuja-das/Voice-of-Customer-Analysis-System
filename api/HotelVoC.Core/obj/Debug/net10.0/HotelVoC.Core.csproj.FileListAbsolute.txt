@@ -10,3 +10,16 @@ C:\Users\binduja\Desktop\VOC\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.dll
 C:\Users\binduja\Desktop\VOC\HotelVoC.Core\obj\Debug\net10.0\refint\HotelVoC.Core.dll
 C:\Users\binduja\Desktop\VOC\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.pdb
 C:\Users\binduja\Desktop\VOC\HotelVoC.Core\obj\Debug\net10.0\ref\HotelVoC.Core.dll
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\bin\Debug\net10.0\HotelVoC.Core.deps.json
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\bin\Debug\net10.0\HotelVoC.Core.dll
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\bin\Debug\net10.0\HotelVoC.Core.pdb
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.csproj.AssemblyReference.cache
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.AssemblyInfoInputs.cache
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.AssemblyInfo.cs
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.csproj.CoreCompileInputs.cache
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.sourcelink.json
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.dll
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\refint\HotelVoC.Core.dll
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\HotelVoC.Core.pdb
+C:\Users\binduja\Desktop\VOC\api\HotelVoC.Core\obj\Debug\net10.0\ref\HotelVoC.Core.dll

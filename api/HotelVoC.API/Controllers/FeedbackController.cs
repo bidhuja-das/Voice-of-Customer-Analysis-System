@@ -7,7 +7,7 @@ namespace HotelVoC.API.Controllers;
 
 [ApiController]
 [Route("api/feedback")]
-[Authorize(Roles ="Analyst")]
+
 public class FeedbackController : ControllerBase
 {
     private readonly IFeedbackService _feedbackService;

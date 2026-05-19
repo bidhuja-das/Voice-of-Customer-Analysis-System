@@ -1,0 +1,57 @@
+<div class="sidebar">
+
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <span class="logo-icon">📊</span>
+    <span class="logo-text">VoC Intel</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+
+    <div class="nav-section-label">MAIN</div>
+
+    <ng-container *ngIf="authService.getRole() === 'Executive'">
+      <a routerLink="/dashboard"
+         class="nav-item"
+         [class.active]="isActive('dashboard')">
+        <span class="nav-icon">🏠</span>
+        <span>Dashboard</span>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="authService.getRole() === 'Analyst'">
+      <a routerLink="/feedback"
+         class="nav-item"
+         [class.active]="isActive('feedback')">
+        <span class="nav-icon">💬</span>
+        <span>Feedback</span>
+      </a>
+    </ng-container>
+
+    <div class="nav-section-label">INSIGHTS</div>
+
+    <a routerLink="/insights"
+       class="nav-item"
+       [class.active]="isActive('insights')">
+      <span class="nav-icon">🔍</span>
+      <span>Topics & Insights</span>
+    </a>
+
+  </nav>
+
+  <!-- User info at bottom -->
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ authService.getEmail()?.charAt(0)?.toUpperCase() }}
+      </div>
+      <div class="user-details">
+        <span class="user-email">{{ authService.getEmail() }}</span>
+        <span class="user-role">{{ authService.getRole() }}</span>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="logout()">⏻</button>
+  </div>
+
+</div>
