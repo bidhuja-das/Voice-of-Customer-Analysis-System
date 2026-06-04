@@ -1,1 +1,188 @@
-<p>topics-insights works!</p>
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Topics & Insights</h1>
+      <p>AI-generated insights grouped by urgency</p>
+    </div>
+    <button
+      class="btn-primary"
+      (click)="generateInsights()"
+      [disabled]="generating">
+      {{ generating ? 'Generating...' : 'Generate Insights' }}
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div class="alert alert-success" *ngIf="generateMessage">{{ generateMessage }}</div>
+  <div class="alert alert-error" *ngIf="generateError">{{ generateError }}</div>
+
+  <div *ngIf="loading" class="spinner"></div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- Urgency Summary Strip -->
+    <div class="urgency-strip" style="margin-bottom: 28px;">
+      <div class="urgency-pill critical">
+        <span class="urgency-num">{{ getByUrgency('Critical').length }}</span>
+        <span class="urgency-lbl">Critical</span>
+      </div>
+      <div class="urgency-divider"></div>
+      <div class="urgency-pill high">
+        <span class="urgency-num">{{ getByUrgency('High').length }}</span>
+        <span class="urgency-lbl">High</span>
+      </div>
+      <div class="urgency-divider"></div>
+      <div class="urgency-pill medium">
+        <span class="urgency-num">{{ getByUrgency('Medium').length }}</span>
+        <span class="urgency-lbl">Medium</span>
+      </div>
+      <div class="urgency-divider"></div>
+      <div class="urgency-pill low">
+        <span class="urgency-num">{{ getByUrgency('Low').length }}</span>
+        <span class="urgency-lbl">Low</span>
+      </div>
+      <div class="urgency-divider"></div>
+      <div class="urgency-pill total">
+        <span class="urgency-num">{{ insights.length }}</span>
+        <span class="urgency-lbl">Total</span>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-card" *ngIf="insights.length === 0">
+      <div class="empty-icon">⚙</div>
+      <h3>No insights yet</h3>
+      <p>Click Generate Insights to let AI analyze all feedback</p>
+      <button class="btn-primary" (click)="generateInsights()">Generate Now</button>
+    </div>
+
+    <!-- Two column layout — left urgency nav, right cards -->
+    <div class="insights-layout" *ngIf="insights.length > 0">
+
+      <!-- Left sticky urgency navigation -->
+      <div class="urgency-nav">
+        <div class="nav-label">FILTER BY</div>
+        <button class="unav-btn active-all" (click)="scrollTo('critical')">
+          <span class="unav-dot critical-dot"></span>
+          Critical
+          <span class="unav-count">{{ getByUrgency('Critical').length }}</span>
+        </button>
+        <button class="unav-btn" (click)="scrollTo('high')">
+          <span class="unav-dot high-dot"></span>
+          High
+          <span class="unav-count">{{ getByUrgency('High').length }}</span>
+        </button>
+        <button class="unav-btn" (click)="scrollTo('medium')">
+          <span class="unav-dot medium-dot"></span>
+          Medium
+          <span class="unav-count">{{ getByUrgency('Medium').length }}</span>
+        </button>
+        <button class="unav-btn" (click)="scrollTo('low')">
+          <span class="unav-dot low-dot"></span>
+          Low
+          <span class="unav-count">{{ getByUrgency('Low').length }}</span>
+        </button>
+      </div>
+
+      <!-- Right scrollable insights -->
+      <div class="insights-content">
+
+        <!-- Critical -->
+        <div id="critical" *ngIf="getByUrgency('Critical').length > 0">
+          <div class="section-header critical-header">
+            <div class="section-line critical-line"></div>
+            <span class="section-title">Critical</span>
+            <div class="section-line critical-line"></div>
+          </div>
+          <div class="insight-row" *ngFor="let insight of getByUrgency('Critical')">
+            <div class="insight-left">
+              <div class="insight-count critical-count">{{ insight.feedbackCount }}</div>
+              <div class="insight-count-label">feedbacks</div>
+            </div>
+            <div class="insight-body critical-body">
+              <div class="insight-top-row">
+                <span class="topic-chip critical-chip">{{ insight.topicName }}</span>
+                <span class="urgency-tag critical-tag">Critical</span>
+              </div>
+              <h3 class="insight-title">{{ insight.title }}</h3>
+              <p class="insight-summary">{{ insight.summary }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- High -->
+        <div id="high" *ngIf="getByUrgency('High').length > 0">
+          <div class="section-header high-header">
+            <div class="section-line high-line"></div>
+            <span class="section-title">High Priority</span>
+            <div class="section-line high-line"></div>
+          </div>
+          <div class="insight-row" *ngFor="let insight of getByUrgency('High')">
+            <div class="insight-left">
+              <div class="insight-count high-count">{{ insight.feedbackCount }}</div>
+              <div class="insight-count-label">feedbacks</div>
+            </div>
+            <div class="insight-body high-body">
+              <div class="insight-top-row">
+                <span class="topic-chip high-chip">{{ insight.topicName }}</span>
+                <span class="urgency-tag high-tag">High</span>
+              </div>
+              <h3 class="insight-title">{{ insight.title }}</h3>
+              <p class="insight-summary">{{ insight.summary }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medium -->
+        <div id="medium" *ngIf="getByUrgency('Medium').length > 0">
+          <div class="section-header medium-header">
+            <div class="section-line medium-line"></div>
+            <span class="section-title">Medium Priority</span>
+            <div class="section-line medium-line"></div>
+          </div>
+          <div class="insight-row" *ngFor="let insight of getByUrgency('Medium')">
+            <div class="insight-left">
+              <div class="insight-count medium-count">{{ insight.feedbackCount }}</div>
+              <div class="insight-count-label">feedbacks</div>
+            </div>
+            <div class="insight-body medium-body">
+              <div class="insight-top-row">
+                <span class="topic-chip medium-chip">{{ insight.topicName }}</span>
+                <span class="urgency-tag medium-tag">Medium</span>
+              </div>
+              <h3 class="insight-title">{{ insight.title }}</h3>
+              <p class="insight-summary">{{ insight.summary }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low -->
+        <div id="low" *ngIf="getByUrgency('Low').length > 0">
+          <div class="section-header low-header">
+            <div class="section-line low-line"></div>
+            <span class="section-title">Low Priority</span>
+            <div class="section-line low-line"></div>
+          </div>
+          <div class="insight-row" *ngFor="let insight of getByUrgency('Low')">
+            <div class="insight-left">
+              <div class="insight-count low-count">{{ insight.feedbackCount }}</div>
+              <div class="insight-count-label">feedbacks</div>
+            </div>
+            <div class="insight-body low-body">
+              <div class="insight-top-row">
+                <span class="topic-chip low-chip">{{ insight.topicName }}</span>
+                <span class="urgency-tag low-tag">Low</span>
+              </div>
+              <h3 class="insight-title">{{ insight.title }}</h3>
+              <p class="insight-summary">{{ insight.summary }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+</div>

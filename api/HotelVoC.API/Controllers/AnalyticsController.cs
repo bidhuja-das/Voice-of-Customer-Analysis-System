@@ -1,8 +1,9 @@
 using HotelVoC.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelVoC.API.Controllers;
-
+[Authorize(Roles = "Analyst,Executive")]
 [ApiController]
 [Route("api/analytics")]
 public class AnalyticsController : ControllerBase
@@ -29,11 +30,13 @@ public class AnalyticsController : ControllerBase
     }
 
     [HttpGet("comparison")]
-    public async Task<IActionResult> GetComparison()
-    {
-        var result = await _analyticsService.GetComparison();
-        return Ok(result);
-    }
+public async Task<IActionResult> GetComparison(
+    [FromQuery] DateTime? from,
+    [FromQuery] DateTime? to)
+{
+    var result = await _analyticsService.GetComparison(from, to);
+    return Ok(result);
+}
 
     [HttpGet("daily-reports")]
     public async Task<IActionResult> GetDailyReports()

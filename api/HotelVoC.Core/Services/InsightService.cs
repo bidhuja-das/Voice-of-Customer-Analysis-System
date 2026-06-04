@@ -36,10 +36,19 @@ public class InsightService
             var negativeCount = group.Count(f => f.SentimentResult?.Label == "Negative");
 
             // Determine urgency
+            // Determine urgency — adjusted for smaller datasets
+            // Determine urgency using both count AND percentage
             var urgency = "Low";
-            if (negativeCount >= 10) urgency = "Critical";
-            else if (negativeCount >= 5) urgency = "High";
-            else if (negativeCount >= 2) urgency = "Medium";
+            var negativePercent = count > 0 ? (double)negativeCount / count * 100 : 0;
+
+            if (negativeCount >= 3 && negativePercent >= 60)
+                urgency = "Critical";
+            else if (negativeCount >= 2 && negativePercent >= 50)
+                urgency = "High";
+            else if (negativeCount >= 1 && negativePercent >= 30)
+                urgency = "Medium";
+            else
+                urgency = "Low";
 
             // Generate AI summary for this topic
             var texts = string.Join(". ", group.Select(f => f.RawText).Take(5));

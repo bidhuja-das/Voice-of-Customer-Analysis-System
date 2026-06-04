@@ -2,9 +2,9 @@ using HotelVoC.API.DTOs;
 using HotelVoC.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace HotelVoC.API.Controllers;
-
+[Authorize(Roles = "Analyst,Executive")]
 [ApiController]
 [Route("api/feedback")]
 

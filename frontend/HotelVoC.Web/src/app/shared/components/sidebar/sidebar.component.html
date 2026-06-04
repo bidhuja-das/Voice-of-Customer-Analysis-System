@@ -1,22 +1,19 @@
 <div class="sidebar">
 
-  <!-- Logo -->
   <div class="sidebar-logo">
-    <span class="logo-icon">📊</span>
-    <span class="logo-text">VoC Intel</span>
+    <span class="logo-text">Analysis</span>
   </div>
 
-  <!-- Navigation -->
   <nav class="sidebar-nav">
 
-    <div class="nav-section-label">MAIN</div>
+    <div class="nav-section-label"></div>
 
     <ng-container *ngIf="authService.getRole() === 'Executive'">
       <a routerLink="/dashboard"
          class="nav-item"
          [class.active]="isActive('dashboard')">
-        <span class="nav-icon">🏠</span>
-        <span>Dashboard</span>
+        <span>Home</span>
+        <span class="badge-count" *ngIf="criticalCount > 0">{{ criticalCount }}</span>
       </a>
     </ng-container>
 
@@ -24,23 +21,20 @@
       <a routerLink="/feedback"
          class="nav-item"
          [class.active]="isActive('feedback')">
-        <span class="nav-icon">💬</span>
         <span>Feedback</span>
       </a>
     </ng-container>
 
-    <div class="nav-section-label">INSIGHTS</div>
+    <div class="nav-section-label"></div>
 
     <a routerLink="/insights"
        class="nav-item"
        [class.active]="isActive('insights')">
-      <span class="nav-icon">🔍</span>
       <span>Topics & Insights</span>
     </a>
 
   </nav>
 
-  <!-- User info at bottom -->
   <div class="sidebar-footer">
     <div class="user-info">
       <div class="user-avatar">

@@ -1,8 +1,9 @@
 using HotelVoC.Core.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace HotelVoC.API.Controllers;
 
+[Authorize(Roles = "Executive")]
 [ApiController]
 [Route("api/dashboard")]
 public class DashboardController : ControllerBase

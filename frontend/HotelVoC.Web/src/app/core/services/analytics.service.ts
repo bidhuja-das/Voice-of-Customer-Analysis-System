@@ -7,6 +7,9 @@ export interface SentimentSummary {
   negative: number;
   neutral: number;
   total: number;
+  positivePercent: number;
+  negativePercent: number;
+  neutralPercent: number;
 }
 
 export interface TopicData {
@@ -43,28 +46,31 @@ export class AnalyticsService {
 
   constructor(private http: HttpClient) {}
 
-  // Gets % positive/negative/neutral — used in pie chart
-  getSentimentSummary(): Observable<SentimentSummary> {
-    return this.http.get<SentimentSummary>(`${this.apiUrl}/sentiment-summary`);
+  getSentimentSummary(from?: string, to?: string): Observable<SentimentSummary> {
+    let params = '';
+    if (from && to) params = `?from=${from}&to=${to}`;
+    return this.http.get<SentimentSummary>(`${this.apiUrl}/sentiment-summary${params}`);
   }
 
-  // Gets topic list with counts — used in bar chart
-  getTopics(): Observable<TopicData[]> {
-    return this.http.get<TopicData[]>(`${this.apiUrl}/topics`);
+  getTopics(from?: string, to?: string): Observable<TopicData[]> {
+    let params = '';
+    if (from && to) params = `?from=${from}&to=${to}`;
+    return this.http.get<TopicData[]>(`${this.apiUrl}/topics${params}`);
   }
 
-  // Gets day/week/month comparison — used in comparison chart
-  getComparison(): Observable<ComparisonData[]> {
-    return this.http.get<ComparisonData[]>(`${this.apiUrl}/comparison`);
-  }
+  getComparison(from?: string, to?: string): Observable<ComparisonData[]> {
+  let params = '';
+  if (from && to) params = `?from=${from}&to=${to}`;
+  return this.http.get<ComparisonData[]>(`${this.apiUrl}/comparison${params}`);
+}
 
-  // Gets all daily reports
   getDailyReports(): Observable<DailyReport[]> {
     return this.http.get<DailyReport[]>(`${this.apiUrl}/daily-reports`);
   }
 
-  // Gets all numbers for dashboard KPI cards
-  getDashboardStats(): Observable<any> {
-    return this.http.get<any>(`${this.dashboardUrl}/stats`);
+  getDashboardStats(from?: string, to?: string): Observable<any> {
+    let params = '';
+    if (from && to) params = `?from=${from}&to=${to}`;
+    return this.http.get<any>(`${this.dashboardUrl}/stats${params}`);
   }
 }

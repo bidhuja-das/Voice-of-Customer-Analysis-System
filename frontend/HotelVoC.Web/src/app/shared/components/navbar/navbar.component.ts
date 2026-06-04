@@ -17,7 +17,7 @@ export class NavbarComponent {
 
   getPageTitle(): string {
     const url = this.router.url;
-    if (url.includes('dashboard')) return 'Dashboard';
+    if (url.includes('dashboard')) return 'Home';
     if (url.includes('feedback')) return 'Feedback Management';
     if (url.includes('insights')) return 'Topics & Insights';
     return 'VoC Analysis';

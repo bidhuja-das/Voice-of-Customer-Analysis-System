@@ -123,4 +123,61 @@ export class FeedbackListComponent implements OnInit {
     this.selectedSource = '';
     this.applyFilters();
   }
+
+  // Add these new properties
+showAddModal = false;
+newFeedback = {
+  sourceId: 1,
+  customerIdentifier: '',
+  rawText: '',
+  submittedAt: new Date().toISOString().split('T')[0]
+};
+addLoading = false;
+addMessage = '';
+addError = '';
+
+// Add these new methods
+openAddModal() {
+  this.showAddModal = true;
+  this.addMessage = '';
+  this.addError = '';
+  this.newFeedback = {
+    sourceId: 1,
+    customerIdentifier: '',
+    rawText: '',
+    submittedAt: new Date().toISOString().split('T')[0]
+  };
+}
+
+closeAddModal() {
+  this.showAddModal = false;
+}
+
+submitFeedback() {
+  if (!this.newFeedback.rawText.trim()) {
+    this.addError = 'Feedback text is required.';
+    return;
+  }
+
+  this.addLoading = true;
+  this.addError = '';
+
+  this.feedbackService.ingestOne({
+    sourceId: this.newFeedback.sourceId,
+    customerIdentifier: this.newFeedback.customerIdentifier || 'anonymous',
+    rawText: this.newFeedback.rawText,
+    submittedAt: this.newFeedback.submittedAt
+  }).subscribe({
+    next: () => {
+      this.addLoading = false;
+      this.addMessage = 'Feedback added successfully!';
+      this.loadFeedbacks();
+      setTimeout(() => this.closeAddModal(), 1500);
+    },
+    error: () => {
+      this.addLoading = false;
+      this.addError = 'Failed to add feedback. Try again.';
+    }
+  });
+}
 }

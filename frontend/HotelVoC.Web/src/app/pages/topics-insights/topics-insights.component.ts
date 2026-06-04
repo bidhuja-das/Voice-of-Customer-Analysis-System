@@ -1,12 +1,81 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { InsightService, Insight } from '../../core/services/insight.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-topics-insights',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './topics-insights.component.html',
-  styleUrl: './topics-insights.component.scss'
+  styleUrls: ['./topics-insights.component.scss']
 })
-export class TopicsInsightsComponent {
+export class TopicsInsightsComponent implements OnInit {
+  insights: Insight[] = [];
+  loading = false;
+  generating = false;
+  generateMessage = '';
+  generateError = '';
 
+  constructor(
+    private insightService: InsightService,
+    public authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.loadInsights();
+  }
+
+  loadInsights() {
+    this.loading = true;
+    this.insightService.getAll().subscribe({
+      next: (data) => {
+        this.insights = data;
+        this.loading = false;
+      },
+      error: () => { this.loading = false; }
+    });
+  }
+
+  generateInsights() {
+    this.generating = true;
+    this.generateMessage = '';
+    this.generateError = '';
+
+    this.insightService.generate().subscribe({
+      next: () => {
+        this.generating = false;
+        this.generateMessage = 'Insights generated successfully!';
+        this.loadInsights();
+      },
+      error: () => {
+        this.generating = false;
+        this.generateError = 'Failed to generate insights. Try again.';
+      }
+    });
+  }
+
+  // Filter insights by urgency level
+  getByUrgency(level: string): Insight[] {
+    return this.insights.filter(i => i.urgencyLevel === level);
+  }
+
+  getUrgencyIcon(level: string): string {
+    const icons: any = {
+      'Critical': '🔴',
+      'High': '🟠',
+      'Medium': '🟡',
+      'Low': '🟢'
+    };
+    return icons[level] || '⚪';
+  }
+
+  getUrgencyClass(level: string): string {
+    return 'badge-' + level?.toLowerCase();
+  }
+
+  scrollTo(id: string) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 }

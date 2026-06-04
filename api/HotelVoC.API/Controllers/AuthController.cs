@@ -2,6 +2,7 @@ using HotelVoC.API.DTOs;
 using HotelVoC.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using HotelVoC.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelVoC.API.Controllers;
 
@@ -34,18 +35,6 @@ public class AuthController : ControllerBase
         });
     }
 
-    [HttpGet("test-email")]
-public async Task<IActionResult> TestEmail([FromServices] EmailService emailService)
-{
-    await emailService.SendUrgentAlert(
-        "customer_test",
-        "Amazon Reviews",
-        "Delivery Speed",
-        "Negative",
-        "Package never arrived after 3 weeks. I want a refund immediately."
-    );
-    return Ok(new { message = "Email sent" });
-}
 
    
 }

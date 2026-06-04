@@ -1,90 +1,139 @@
 .kpi-card {
   display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.kpi-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.kpi-info {
-  display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  padding: 20px 24px;
 }
 
 .kpi-label {
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  letter-spacing: 0.8px;
 }
 
 .kpi-value {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
 
-  &.positive { color: var(--positive); }
-  &.negative { color: var(--negative); }
+  &.positive { color: #2dc653; }
+  &.negative { color: #e63946; }
   &.topic {
     font-size: 16px;
-    color: var(--accent-purple);
+    color: #2d6abf;
+    font-weight: 600;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.period-selector {
+  display: flex;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.period-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:last-child { border-right: none; }
+
+  &:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &.active {
+    background: #2d6abf;
+    color: white;
   }
 }
 
 .chart-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .chart-subtitle {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.critical-banner {
+  background: rgba(230,57,70,0.06);
+  border: 1px solid rgba(230,57,70,0.2);
+  border-radius: 10px;
+  padding: 12px 20px;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .banner-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-primary);
+    strong { color: #e63946; }
+  }
+
+  .banner-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    &:hover { color: #e63946; }
+  }
 }
 
 .reports-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   margin-top: 16px;
 }
 
 .report-item {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 16px;
   transition: all 0.2s;
 
-  &:hover {
-    border-color: var(--accent-blue);
-  }
+  &:hover { border-color: #2d6abf; }
 }
 
 .report-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
   gap: 8px;
 }
 
 .report-date {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -103,22 +152,10 @@
 }
 
 .topic-tag {
-  background: rgba(155, 89, 182, 0.1);
-  color: var(--accent-purple);
+  background: rgba(45,106,191,0.1);
+  color: #2d6abf;
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 12px;
-}
-
-// Override ngx-charts text colors for dark theme
-::ng-deep {
-  .ngx-charts text {
-    fill: var(--text-secondary) !important;
-  }
-  .ngx-charts .gridline-path {
-    stroke: var(--border) !important;
-  }
-  .legend-label-text {
-    color: var(--text-secondary) !important;
-  }
+  font-weight: 500;
 }

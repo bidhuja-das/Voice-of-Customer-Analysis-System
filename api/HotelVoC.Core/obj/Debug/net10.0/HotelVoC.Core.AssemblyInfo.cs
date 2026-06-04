@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HotelVoC.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+36bb0f64cd934362b61b6eb22a336bf389aa6f85")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f134f1119e61874c5a3b4ce45d1e4dda0b7eab9")]
 [assembly: System.Reflection.AssemblyProductAttribute("HotelVoC.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HotelVoC.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
