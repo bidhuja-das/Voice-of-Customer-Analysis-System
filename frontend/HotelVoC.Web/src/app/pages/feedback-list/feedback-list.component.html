@@ -69,7 +69,7 @@
       ➖ Neutral: <strong>{{ filteredFeedbacks | sentimentCount:'Neutral' }}</strong>
     </span>
     <span class="stat-item">
-      ⏳ Pending: <strong>{{ filteredFeedbacks | pendingCount }}</strong>
+       Pending: <strong>{{ filteredFeedbacks | pendingCount }}</strong>
     </span>
   </div>
 
@@ -81,7 +81,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          
           <th>Customer</th>
           <th>Source</th>
           <th>Feedback</th>
@@ -93,7 +93,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let f of paginatedFeedbacks">
-          <td class="id-col">{{ f.feedbackId }}</td>
           <td class="customer-col">{{ f.customerIdentifier }}</td>
           <td><span class="source-badge">{{ f.sourceName }}</span></td>
           <td class="text-col">{{ f.rawText }}</td>

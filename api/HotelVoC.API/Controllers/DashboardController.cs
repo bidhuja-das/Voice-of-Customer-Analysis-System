@@ -16,9 +16,11 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("stats")]
-    public async Task<IActionResult> GetStats()
-    {
-        var result = await _analyticsService.GetDashboardStats();
-        return Ok(result);
-    }
+public async Task<IActionResult> GetStats(
+    [FromQuery] DateTime? from = null,
+    [FromQuery] DateTime? to = null)
+{
+    var result = await _analyticsService.GetDashboardStats(from, to);
+    return Ok(result);
+}
 }

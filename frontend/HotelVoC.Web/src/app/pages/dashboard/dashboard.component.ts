@@ -96,7 +96,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   this.analyticsService.getDashboardStats(from, to).subscribe({
-    next: (data) => { this.stats = data; }
+  next: (data) => {
+    this.stats = data;
+    console.log('Stats:', data.totalFeedback, 'feedbacks');
+    checkDone();
+  },
+  error: () => checkDone()
   });
 
   this.analyticsService.getSentimentSummary(from, to).subscribe({

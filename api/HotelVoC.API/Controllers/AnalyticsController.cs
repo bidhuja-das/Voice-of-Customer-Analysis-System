@@ -1,9 +1,10 @@
 using HotelVoC.Core.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotelVoC.API.Controllers;
-[Authorize(Roles = "Analyst,Executive")]
+
+[Authorize]
 [ApiController]
 [Route("api/analytics")]
 public class AnalyticsController : ControllerBase
@@ -16,27 +17,31 @@ public class AnalyticsController : ControllerBase
     }
 
     [HttpGet("sentiment-summary")]
-    public async Task<IActionResult> GetSentimentSummary()
+    public async Task<IActionResult> GetSentimentSummary(
+        [FromQuery] DateTime? from = null,
+        [FromQuery] DateTime? to = null)
     {
-        var result = await _analyticsService.GetSentimentSummary();
+        var result = await _analyticsService.GetSentimentSummary(from, to);
         return Ok(result);
     }
 
     [HttpGet("topics")]
-    public async Task<IActionResult> GetTopics()
+    public async Task<IActionResult> GetTopics(
+        [FromQuery] DateTime? from = null,
+        [FromQuery] DateTime? to = null)
     {
-        var result = await _analyticsService.GetTopics();
+        var result = await _analyticsService.GetTopics(from, to);
         return Ok(result);
     }
 
     [HttpGet("comparison")]
-public async Task<IActionResult> GetComparison(
-    [FromQuery] DateTime? from,
-    [FromQuery] DateTime? to)
-{
-    var result = await _analyticsService.GetComparison(from, to);
-    return Ok(result);
-}
+    public async Task<IActionResult> GetComparison(
+        [FromQuery] DateTime? from = null,
+        [FromQuery] DateTime? to = null)
+    {
+        var result = await _analyticsService.GetComparison(from, to);
+        return Ok(result);
+    }
 
     [HttpGet("daily-reports")]
     public async Task<IActionResult> GetDailyReports()
