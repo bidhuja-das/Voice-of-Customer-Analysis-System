@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FeedbackService, Feedback } from '../../core/services/feedback.service';
 import { SentimentCountPipe, PendingCountPipe } from '../../core/pipes/sentiment-count.pipe';
+import { ToastService } from '../../core/services/toast.service';
 
 // Add to imports array:
 
@@ -30,7 +31,9 @@ export class FeedbackListComponent implements OnInit {
   pageSize = 10;
   totalPages = 1;
 
-  constructor(private feedbackService: FeedbackService) {}
+  constructor(
+    private feedbackService: FeedbackService,
+  private toast: ToastService) {}
 
   ngOnInit() {
     this.loadFeedbacks();
@@ -92,25 +95,28 @@ export class FeedbackListComponent implements OnInit {
   }
 
   onFileUpload(event: any) {
-    const file = event.target.files[0];
-    if (!file) return;
+  const file = event.target.files[0];
+  if (!file) return;
 
-    this.uploadLoading = true;
-    this.uploadMessage = '';
-    this.uploadError = '';
+  this.uploadLoading = true;
+  this.uploadMessage = '';
+  this.uploadError = '';
 
-    this.feedbackService.bulkIngest(file).subscribe({
-      next: (res) => {
-        this.uploadLoading = false;
-        this.uploadMessage = res.message;
-        this.loadFeedbacks();
-      },
-      error: () => {
-        this.uploadLoading = false;
-        this.uploadError = 'Upload failed. Please check your CSV format.';
+  this.feedbackService.bulkIngest(file).subscribe({
+    next: (res) => {
+      this.uploadLoading = false;
+      this.uploadMessage = res.message;
+      if (res.errors?.length > 0) {
+        this.uploadError = `${res.errors.length} rows had errors and were skipped.`;
       }
-    });
-  }
+      this.loadFeedbacks();
+    },
+    error: () => {
+      this.uploadLoading = false;
+      this.uploadError = 'Upload failed. Please check your CSV format.';
+    }
+  });
+}
 
   getSentimentClass(sentiment: string | null): string {
     if (!sentiment) return '';
@@ -154,13 +160,14 @@ closeAddModal() {
 }
 
 submitFeedback() {
+  this.addError = '';
+
   if (!this.newFeedback.rawText.trim()) {
     this.addError = 'Feedback text is required.';
     return;
   }
 
   this.addLoading = true;
-  this.addError = '';
 
   this.feedbackService.ingestOne({
     sourceId: this.newFeedback.sourceId,
@@ -174,10 +181,11 @@ submitFeedback() {
       this.loadFeedbacks();
       setTimeout(() => this.closeAddModal(), 1500);
     },
-    error: () => {
+    error: (err) => {
       this.addLoading = false;
-      this.addError = 'Failed to add feedback. Try again.';
+      this.addError = err.error?.error || 'Failed to add feedback. Please try again.';
     }
   });
 }
+  
 }

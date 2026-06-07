@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, SidebarComponent, CommonModule],
+  imports: [RouterOutlet, NavbarComponent, SidebarComponent, CommonModule, ToastComponent],
   template: `
     <div class="app-layout" *ngIf="authService.isLoggedIn(); else loginPage">
       <app-sidebar></app-sidebar>
@@ -20,6 +21,7 @@ import { AuthService } from './core/services/auth.service';
     <ng-template #loginPage>
       <router-outlet></router-outlet>
     </ng-template>
+    <app-toast></app-toast>
   `,
   styles: [`
     .app-layout {

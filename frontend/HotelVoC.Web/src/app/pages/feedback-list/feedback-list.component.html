@@ -10,20 +10,16 @@
       <button class="btn-primary" (click)="openAddModal()">
         + Add Feedback
       </button>
-      <label class="upload-btn" [class.loading]="uploadLoading">
-        <span *ngIf="!uploadLoading">⬆ Upload CSV</span>
-        <span *ngIf="uploadLoading">Uploading...</span>
-        <input type="file" accept=".csv" (change)="onFileUpload($event)" hidden />
-      </label>
+      <div class="upload-wrapper">
+        <label class="upload-btn" [class.loading]="uploadLoading">
+          <span *ngIf="!uploadLoading">Upload CSV</span>
+          <span *ngIf="uploadLoading">Uploading...</span>
+          <input type="file" accept=".csv" (change)="onFileUpload($event)" hidden />
+        </label>
+        <span class="upload-result success" *ngIf="uploadMessage">{{ uploadMessage }}</span>
+        <span class="upload-result error" *ngIf="uploadError">{{ uploadError }}</span>
+      </div>
     </div>
-  </div>
-
-  <!-- Upload messages -->
-  <div class="alert alert-success" *ngIf="uploadMessage">
-    ✅ {{ uploadMessage }}
-  </div>
-  <div class="alert alert-error" *ngIf="uploadError">
-    ❌ {{ uploadError }}
   </div>
 
   <!-- Filters -->
@@ -31,7 +27,7 @@
     <div class="filter-group">
       <input
         type="text"
-        placeholder="🔍 Search feedback..."
+        placeholder="Search feedback..."
         [(ngModel)]="searchText"
         (ngModelChange)="applyFilters()"
         class="filter-input"
@@ -60,16 +56,16 @@
       Total: <strong>{{ filteredFeedbacks.length }}</strong>
     </span>
     <span class="stat-item positive">
-      ✅ Positive: <strong>{{ filteredFeedbacks | sentimentCount:'Positive' }}</strong>
+      Positive: <strong>{{ filteredFeedbacks | sentimentCount:'Positive' }}</strong>
     </span>
     <span class="stat-item negative">
-      ❌ Negative: <strong>{{ filteredFeedbacks | sentimentCount:'Negative' }}</strong>
+      Negative: <strong>{{ filteredFeedbacks | sentimentCount:'Negative' }}</strong>
     </span>
     <span class="stat-item neutral">
-      ➖ Neutral: <strong>{{ filteredFeedbacks | sentimentCount:'Neutral' }}</strong>
+      Neutral: <strong>{{ filteredFeedbacks | sentimentCount:'Neutral' }}</strong>
     </span>
     <span class="stat-item">
-       Pending: <strong>{{ filteredFeedbacks | pendingCount }}</strong>
+      Pending: <strong>{{ filteredFeedbacks | pendingCount }}</strong>
     </span>
   </div>
 
@@ -81,7 +77,6 @@
     <table>
       <thead>
         <tr>
-          
           <th>Customer</th>
           <th>Source</th>
           <th>Feedback</th>
@@ -116,7 +111,7 @@
           </td>
         </tr>
         <tr *ngIf="paginatedFeedbacks.length === 0">
-          <td colspan="8" class="empty-state">No feedback found</td>
+          <td colspan="7" class="empty-state">No feedback found</td>
         </tr>
       </tbody>
     </table>
@@ -125,7 +120,7 @@
   <!-- Pagination -->
   <div class="pagination" *ngIf="totalPages > 1">
     <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-      ← Prev
+      Prev
     </button>
     <ng-container *ngFor="let page of pages">
       <button
@@ -136,7 +131,7 @@
       </button>
     </ng-container>
     <button class="page-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-      Next →
+      Next
     </button>
   </div>
 
@@ -150,10 +145,7 @@
       </div>
 
       <div class="alert alert-success" *ngIf="addMessage">
-        ✅ {{ addMessage }}
-      </div>
-      <div class="alert alert-error" *ngIf="addError">
-        ❌ {{ addError }}
+        {{ addMessage }}
       </div>
 
       <div class="form-group">
@@ -181,8 +173,10 @@
           [(ngModel)]="newFeedback.rawText"
           placeholder="Enter the customer feedback here..."
           rows="4"
-          class="filter-input textarea">
+          class="filter-input textarea"
+          [class.input-error]="addError">
         </textarea>
+        <span class="field-error" *ngIf="addError">{{ addError }}</span>
       </div>
 
       <div class="form-group">

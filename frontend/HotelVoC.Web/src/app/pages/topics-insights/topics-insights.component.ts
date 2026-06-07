@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InsightService, Insight } from '../../core/services/insight.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-topics-insights',
@@ -19,7 +20,8 @@ export class TopicsInsightsComponent implements OnInit {
 
   constructor(
     private insightService: InsightService,
-    public authService: AuthService
+    public authService: AuthService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -38,22 +40,20 @@ export class TopicsInsightsComponent implements OnInit {
   }
 
   generateInsights() {
-    this.generating = true;
-    this.generateMessage = '';
-    this.generateError = '';
+  this.generating = true;
 
-    this.insightService.generate().subscribe({
-      next: () => {
-        this.generating = false;
-        this.generateMessage = 'Insights generated successfully!';
-        this.loadInsights();
-      },
-      error: () => {
-        this.generating = false;
-        this.generateError = 'Failed to generate insights. Try again.';
-      }
-    });
-  }
+  this.insightService.generate().subscribe({
+    next: () => {
+      this.generating = false;
+      this.toast.success('Insights generated successfully!');
+      this.loadInsights();
+    },
+    error: () => {
+      this.generating = false;
+      this.toast.error('Failed to generate insights. Make sure Ollama is running.');
+    }
+  });
+}
 
   // Filter insights by urgency level
   getByUrgency(level: string): Insight[] {

@@ -52,7 +52,16 @@ public class FeedbackService : IFeedbackService
             .Include(f => f.Source)
             .Include(f => f.SentimentResult)
             .Include(f => f.Topic)
-            .OrderByDescending(f => f.SubmittedAt)
+            .OrderByDescending(f => f.SubmittedAt)       
             .ToListAsync();
+    }
+
+    public async Task<Feedback?> GetById(int id)
+    {
+    return await _context.Feedbacks
+        .Include(f => f.Source)
+        .Include(f => f.SentimentResult)
+        .Include(f => f.Topic)
+        .FirstOrDefaultAsync(f => f.FeedbackId == id);
     }
 }

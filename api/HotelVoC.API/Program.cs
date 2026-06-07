@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using HotelVoC.API.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +91,8 @@ builder.Services.AddHostedService<AnalysisWorker>();
 
 var app = builder.Build();
 
+
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

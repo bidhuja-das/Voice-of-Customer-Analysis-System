@@ -44,79 +44,121 @@ public class AnalysisWorker : BackgroundService
     }
 
     private async Task AnalyzePendingFeedbacks()
+{
+    using var scope = _scopeFactory.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    var pendingFeedbacks = await context.Feedbacks
+        .Include(f => f.Source)
+        .Where(f => !f.IsAnalyzed)
+        .Take(10)
+        .ToListAsync();
+
+    if (!pendingFeedbacks.Any())
     {
-        using var scope = _scopeFactory.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        _logger.LogInformation("No pending feedbacks to analyze.");
+        return;
+    }
 
-        // Get unanalyzed feedbacks
-        var pendingFeedbacks = await context.Feedbacks
-            .Include(f => f.Source)
-            .Where(f => !f.IsAnalyzed)
-            .Take(10) // Process 10 at a time
-            .ToListAsync();
+    _logger.LogInformation($"Analyzing {pendingFeedbacks.Count} feedbacks...");
 
-        if (!pendingFeedbacks.Any())
+    foreach (var feedback in pendingFeedbacks)
+    {
+        int attempts = 0;
+        bool success = false;
+
+        while (attempts < 3 && !success)
         {
-            _logger.LogInformation("No pending feedbacks to analyze.");
-            return;
-        }
-
-        _logger.LogInformation($"Analyzing {pendingFeedbacks.Count} feedbacks...");
-
-        foreach (var feedback in pendingFeedbacks)
-        {
+            attempts++;
             try
             {
-                // Call Ollama
                 var (sentiment, topic) = await _ollamaService.AnalyzeFeedback(feedback.RawText);
 
-                // Save sentiment
+                // Remove existing results if retrying
+                var existingSentiment = context.SentimentResults
+                    .FirstOrDefault(s => s.FeedbackId == feedback.FeedbackId);
+                if (existingSentiment != null)
+                    context.SentimentResults.Remove(existingSentiment);
+
+                var existingTopic = context.Topics
+                    .FirstOrDefault(t => t.FeedbackId == feedback.FeedbackId);
+                if (existingTopic != null)
+                    context.Topics.Remove(existingTopic);
+
                 context.SentimentResults.Add(new SentimentResult
                 {
                     FeedbackId = feedback.FeedbackId,
                     Label = sentiment
                 });
 
-                // Save topic
                 context.Topics.Add(new Topic
                 {
                     FeedbackId = feedback.FeedbackId,
                     Name = topic
                 });
 
-                // Mark as analyzed
                 feedback.IsAnalyzed = true;
-
                 await context.SaveChangesAsync();
+                success = true;
 
-                // Check urgency — send email if negative
+                // Send email if urgent
                 if (sentiment == "Negative")
                 {
                     var urgentTopics = new[] { "delivery", "refund", "damaged", "missing", "fraud", "scam" };
-                    bool isUrgent = urgentTopics.Any(t => 
-                        topic.ToLower().Contains(t) || 
+                    bool isUrgent = urgentTopics.Any(t =>
+                        topic.ToLower().Contains(t) ||
                         feedback.RawText.ToLower().Contains(t));
 
                     if (isUrgent)
                     {
-                        await _emailService.SendUrgentAlert(
-                            feedback.CustomerIdentifier,
-                            feedback.Source?.Name ?? "Unknown",
-                            topic,
-                            sentiment,
-                            feedback.RawText
-                        );
-
-                        _logger.LogInformation($"Urgent alert sent for feedback {feedback.FeedbackId}");
+                        try
+                        {
+                            await _emailService.SendUrgentAlert(
+                                feedback.CustomerIdentifier,
+                                feedback.Source?.Name ?? "Unknown",
+                                topic,
+                                sentiment,
+                                feedback.RawText
+                            );
+                        }
+                        catch (Exception emailEx)
+                        {
+                            _logger.LogWarning(emailEx, "Failed to send urgent email alert");
+                        }
                     }
                 }
+
+                _logger.LogInformation($"Feedback {feedback.FeedbackId} analyzed: {sentiment} / {topic}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to analyze feedback {feedback.FeedbackId}");
+                _logger.LogError(ex, $"Attempt {attempts} failed for feedback {feedback.FeedbackId}");
+
+                if (attempts >= 3)
+                {
+                    // Mark as failed after 3 attempts
+                    feedback.IsAnalyzed = true;
+                    context.SentimentResults.Add(new SentimentResult
+                    {
+                        FeedbackId = feedback.FeedbackId,
+                        Label = "Neutral"
+                    });
+                    context.Topics.Add(new Topic
+                    {
+                        FeedbackId = feedback.FeedbackId,
+                        Name = "Unclassified"
+                    });
+                    await context.SaveChangesAsync();
+                    _logger.LogWarning($"Feedback {feedback.FeedbackId} marked as Unclassified after 3 failed attempts");
+                }
+                else
+                {
+                    await Task.Delay(2000); // Wait 2 seconds before retry
+                }
             }
         }
     }
+}
 
     private async Task GenerateDailyReportIfNeeded()
     {
