@@ -58,12 +58,12 @@ public class OllamaService
                 var sentiment = parsed.GetProperty("sentiment").GetString() ?? "Neutral";
                 var topic = parsed.GetProperty("topic").GetString() ?? "General";
 
-                // Normalize sentiment
+                
                 sentiment = sentiment.Trim();
                 if (!new[] { "Positive", "Negative", "Neutral" }.Contains(sentiment))
                     sentiment = "Neutral";
 
-                // Normalize topic
+                
                 topic = topic.Trim();
                 if (topic.Length > 50) topic = topic.Substring(0, 50);
 
@@ -71,12 +71,12 @@ public class OllamaService
             }
             catch
             {
-                // JSON found but couldn't parse — use fallback
+                
                 return GetFallbackSentiment(feedbackText);
             }
         }
 
-        // No JSON found — use keyword fallback
+        
         return GetFallbackSentiment(feedbackText);
     }
     catch
@@ -89,7 +89,7 @@ private (string sentiment, string topic) GetFallbackSentiment(string text)
 {
     var lower = text.ToLower();
 
-    // Simple keyword sentiment
+    
     var negativeWords = new[] { "late", "damaged", "wrong", "broken", "terrible", "awful", "refund", "missing", "fraud", "scam", "rude", "slow", "never", "worst", "horrible", "disappointing" };
     var positiveWords = new[] { "great", "excellent", "perfect", "amazing", "love", "fast", "good", "best", "wonderful", "fantastic", "happy", "satisfied", "recommend" };
 
@@ -98,7 +98,7 @@ private (string sentiment, string topic) GetFallbackSentiment(string text)
 
     var sentiment = negScore > posScore ? "Negative" : posScore > negScore ? "Positive" : "Neutral";
 
-    // Simple keyword topic
+    
     var topic = "General Feedback";
     if (lower.Contains("deliver") || lower.Contains("ship") || lower.Contains("late") || lower.Contains("arriv")) topic = "Delivery Speed";
     else if (lower.Contains("refund") || lower.Contains("return") || lower.Contains("money")) topic = "Refund Process";

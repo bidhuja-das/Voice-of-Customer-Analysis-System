@@ -1,6 +1,6 @@
 <div class="page-container">
 
-  <!-- Critical Banner -->
+  
   <div class="critical-banner" *ngIf="criticalFeedbacks.length > 0">
     <span class="banner-text">
       <strong>{{ criticalFeedbacks.length }} critical issue(s) need attention:</strong>
@@ -9,7 +9,7 @@
     <button class="banner-close" (click)="criticalFeedbacks = []">✕</button>
   </div>
 
-  <!-- Header -->
+ 
   <div class="page-header">
     <div>
       <h1>Home</h1>
@@ -32,7 +32,7 @@
 
   <ng-container *ngIf="!loading">
 
-    <!-- KPI Cards -->
+    
     <div class="grid-4" style="margin-bottom: 24px;">
   <div class="card kpi-card">
     <div class="kpi-label">Total Feedback</div>
@@ -52,24 +52,24 @@
   </div>
 </div>
 
-    <!-- All 3 Charts in one row -->
+    
     <div class="grid-3" style="margin-bottom: 24px;">
 
-      <!-- Sentiment Pie -->
+      
       <div class="card">
         <h3 class="chart-title">Sentiment Distribution</h3>
         <p class="chart-subtitle">Overall breakdown</p>
         <canvas #sentimentChart height="220"></canvas>
       </div>
 
-      <!-- Topic Bar -->
+      
       <div class="card">
         <h3 class="chart-title">Feedback by Topic</h3>
         <p class="chart-subtitle">Top issues reported</p>
         <canvas #topicChart height="220"></canvas>
       </div>
 
-      <!-- Comparison Line -->
+      
       <div class="card">
         <h3 class="chart-title">Performance Comparison</h3>
         <p class="chart-subtitle">Sentiment over time</p>
@@ -78,7 +78,7 @@
 
     </div>
 
-    <!-- Daily Reports -->
+    
     <div class="card">
       <h3 class="chart-title">Daily Reports</h3>
       <p class="chart-subtitle">AI-generated daily summaries</p>

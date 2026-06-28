@@ -1,6 +1,6 @@
 <div class="page-container">
 
-  <!-- Header -->
+  
   <div class="page-header">
     <div>
       <h1>Feedback Management</h1>
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <!-- Filters -->
+  
   <div class="filters card">
     <div class="filter-group">
       <input
@@ -50,7 +50,6 @@
     <button class="btn-secondary" (click)="clearFilters()">Clear</button>
   </div>
 
-  <!-- Stats bar -->
   <div class="stats-bar">
     <span class="stat-item">
       Total: <strong>{{ filteredFeedbacks.length }}</strong>
@@ -69,10 +68,10 @@
     </span>
   </div>
 
-  <!-- Loading -->
+  
   <div *ngIf="loading" class="spinner"></div>
 
-  <!-- Table -->
+  
   <div class="table-container" *ngIf="!loading">
     <table>
       <thead>
@@ -117,7 +116,6 @@
     </table>
   </div>
 
-  <!-- Pagination -->
   <div class="pagination" *ngIf="totalPages > 1">
     <button class="page-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
       Prev
@@ -135,7 +133,6 @@
     </button>
   </div>
 
-  <!-- Add Feedback Modal -->
   <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
     <div class="modal-box" (click)="$event.stopPropagation()">
 

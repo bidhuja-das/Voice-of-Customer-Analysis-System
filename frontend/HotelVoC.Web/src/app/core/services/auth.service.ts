@@ -21,7 +21,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Sends email + password to backend, saves token on success
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
@@ -32,28 +31,28 @@ export class AuthService {
     );
   }
 
-  // Removes token and sends user back to login
+  
   logout(): void {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
 
-  // Returns true if token exists in storage
+  
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  // Returns the JWT token for API calls
+  
   getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  // Returns Analyst or Executive
+  
   getRole(): string | null {
     return localStorage.getItem('role');
   }
 
-  // Returns logged in user email
+  
   getEmail(): string | null {
     return localStorage.getItem('email');
   }

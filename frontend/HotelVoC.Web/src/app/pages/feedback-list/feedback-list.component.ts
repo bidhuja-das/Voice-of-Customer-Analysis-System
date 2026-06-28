@@ -5,7 +5,6 @@ import { FeedbackService, Feedback } from '../../core/services/feedback.service'
 import { SentimentCountPipe, PendingCountPipe } from '../../core/pipes/sentiment-count.pipe';
 import { ToastService } from '../../core/services/toast.service';
 
-// Add to imports array:
 
 
 @Component({
@@ -26,7 +25,6 @@ export class FeedbackListComponent implements OnInit {
   selectedSentiment = '';
   selectedSource = '';
 
-  // Pagination
   currentPage = 1;
   pageSize = 10;
   totalPages = 1;
@@ -130,7 +128,6 @@ export class FeedbackListComponent implements OnInit {
     this.applyFilters();
   }
 
-  // Add these new properties
 showAddModal = false;
 newFeedback = {
   sourceId: 1,
@@ -142,7 +139,6 @@ addLoading = false;
 addMessage = '';
 addError = '';
 
-// Add these new methods
 openAddModal() {
   this.showAddModal = true;
   this.addMessage = '';

@@ -17,12 +17,12 @@ export class InsightService {
 
   constructor(private http: HttpClient) {}
 
-  // Gets all AI-generated insights — used in insights page
+  
   getAll(): Observable<Insight[]> {
     return this.http.get<Insight[]>(this.apiUrl);
   }
 
-  // Triggers AI to generate insights from analyzed feedbacks
+  
   generate(): Observable<any> {
     return this.http.post(`${this.apiUrl}/generate`, {});
   }

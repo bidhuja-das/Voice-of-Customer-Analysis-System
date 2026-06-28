@@ -35,9 +35,7 @@ public class InsightService
             var count = group.Count();
             var negativeCount = group.Count(f => f.SentimentResult?.Label == "Negative");
 
-            // Determine urgency
-            // Determine urgency — adjusted for smaller datasets
-            // Determine urgency using both count AND percentage
+            
             var urgency = "Low";
             var negativePercent = count > 0 ? (double)negativeCount / count * 100 : 0;
 
@@ -50,17 +48,17 @@ public class InsightService
             else
                 urgency = "Low";
 
-            // Generate AI summary for this topic
+            
             var texts = string.Join(". ", group.Select(f => f.RawText).Take(5));
             var summary = await _ollamaService.GenerateDailySummary(texts);
 
-            // Check if insight already exists for this topic
+            
             var existing = await _context.Insights
                 .FirstOrDefaultAsync(i => i.TopicName == topicName);
 
             if (existing != null)
             {
-                // Update existing
+                
                 existing.Summary = summary;
                 existing.UrgencyLevel = urgency;
                 existing.FeedbackCount = count;
@@ -68,7 +66,7 @@ public class InsightService
             }
             else
             {
-                // Create new
+                
                 _context.Insights.Add(new Insight
                 {
                     Title = $"{topicName} — {urgency} Priority",

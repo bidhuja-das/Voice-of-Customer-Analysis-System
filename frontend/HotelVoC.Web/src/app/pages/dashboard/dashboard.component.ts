@@ -68,10 +68,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onPeriodChange() {
-  // Destroy charts first
+
   this.destroyCharts();
   
-  // Reset data
+  
   this.sentimentData = null;
   this.topicData = null;
   this.comparisonData = null;
@@ -146,10 +146,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   let loadedCount = 0;
   const total = 4;
 
-  // TEMP DEBUG — remove after fixing
+ 
   console.log('Period:', this.selectedPeriod, 'From:', from, 'To:', to);
 
-  // Reset data before loading
+  
   this.sentimentData = null;
   this.topicData = null;
   this.comparisonData = null;
@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     if (loadedCount === total) {
       this.loading = false;
       this.dataLoaded = true;
-      // Small delay to ensure DOM is ready
+      
       setTimeout(() => {
         this.destroyCharts();
         this.renderCharts();

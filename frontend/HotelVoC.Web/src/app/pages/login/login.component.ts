@@ -20,10 +20,10 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    // Clear previous error
+    
     this.error = '';
 
-    // Basic validation
+    
     if (!this.email || !this.password) {
       this.error = 'Please enter email and password.';
       return;
@@ -34,7 +34,7 @@ export class LoginComponent {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (response) => {
         this.loading = false;
-        // Redirect based on role
+        
         if (response.role === 'Analyst') {
           this.router.navigate(['/feedback']);
         } else {

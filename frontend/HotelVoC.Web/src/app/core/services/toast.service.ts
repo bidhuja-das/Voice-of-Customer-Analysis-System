@@ -18,7 +18,7 @@ export class ToastService {
     const toast: Toast = { id, message, type };
     this.toasts$.next([...this.toasts$.value, toast]);
 
-    // Auto remove after 4 seconds
+    
     setTimeout(() => this.remove(id), 4000);
   }
 

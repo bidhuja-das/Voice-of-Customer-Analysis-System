@@ -55,7 +55,7 @@ export class TopicsInsightsComponent implements OnInit {
   });
 }
 
-  // Filter insights by urgency level
+  
   getByUrgency(level: string): Insight[] {
     return this.insights.filter(i => i.urgencyLevel === level);
   }

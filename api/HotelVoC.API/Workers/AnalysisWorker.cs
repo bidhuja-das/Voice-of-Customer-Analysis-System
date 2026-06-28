@@ -38,7 +38,7 @@ public class AnalysisWorker : BackgroundService
                 _logger.LogError(ex, "Error in analysis worker");
             }
 
-            // Wait 3 minutes before next run
+            
             await Task.Delay(TimeSpan.FromMinutes(3), stoppingToken);
         }
     }
@@ -74,7 +74,7 @@ public class AnalysisWorker : BackgroundService
             {
                 var (sentiment, topic) = await _ollamaService.AnalyzeFeedback(feedback.RawText);
 
-                // Remove existing results if retrying
+                
                 var existingSentiment = context.SentimentResults
                     .FirstOrDefault(s => s.FeedbackId == feedback.FeedbackId);
                 if (existingSentiment != null)
@@ -101,7 +101,7 @@ public class AnalysisWorker : BackgroundService
                 await context.SaveChangesAsync();
                 success = true;
 
-                // Send email if urgent
+                
                 if (sentiment == "Negative")
                 {
                     var urgentTopics = new[] { "delivery", "refund", "damaged", "missing", "fraud", "scam" };
@@ -136,7 +136,7 @@ public class AnalysisWorker : BackgroundService
 
                 if (attempts >= 3)
                 {
-                    // Mark as failed after 3 attempts
+                    
                     feedback.IsAnalyzed = true;
                     context.SentimentResults.Add(new SentimentResult
                     {
@@ -153,7 +153,7 @@ public class AnalysisWorker : BackgroundService
                 }
                 else
                 {
-                    await Task.Delay(2000); // Wait 2 seconds before retry
+                    await Task.Delay(2000); 
                 }
             }
         }
@@ -167,13 +167,13 @@ public class AnalysisWorker : BackgroundService
 
         var today = DateOnly.FromDateTime(DateTime.Today);
 
-        // Check if report already exists for today
+        
         var exists = await context.DailyReports
             .AnyAsync(r => r.ReportDate == today);
 
         if (exists) return;
 
-        // Get today's analyzed feedbacks
+        
         var todayFeedbacks = await context.Feedbacks
             .Include(f => f.SentimentResult)
             .Include(f => f.Topic)
@@ -192,7 +192,7 @@ public class AnalysisWorker : BackgroundService
             .OrderByDescending(g => g.Count())
             .First().Key;
 
-        // Generate AI summary
+        
         var feedbackTexts = string.Join(". ", todayFeedbacks.Select(f => f.RawText).Take(10));
         var summary = await _ollamaService.GenerateDailySummary(feedbackTexts);
 
